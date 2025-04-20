@@ -1,16 +1,16 @@
 ﻿using Ambev.Tech.DeveloperStore.Domain.Entities;
-using Ambev.Tech.DeveloperStore.Application.Auth.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ambev.Tech.DeveloperStore.Application.Interface
+namespace Ambev.Tech.DeveloperStore.Domain.Interfaces
 {
     public interface IAuthRepository
     {
-        Task<AuthToken> LoginAsync(LoginDto authDto);
+        Task<AuthToken> GenerateTokenAsync(int userId, string username);
         Task<bool> ValidateTokenAsync(string token);
+        Task InvalidateTokenAsync(string token);
     }
 }
