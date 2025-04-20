@@ -1,0 +1,80 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{43F38F78-4D70-440B-9E51-F651EB5C12B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApi", "WebApi", "{C6FC86E2-DDA4-4891-9196-2E277AE3116E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{A301E779-50C6-4810-B984-F7D5B3AF99E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ambev.Tech.DeveloperStore.Application", "src\Application\Ambev.Tech.DeveloperStore.Application\Ambev.Tech.DeveloperStore.Application.csproj", "{F2488FAA-35F7-4593-98A6-15B1AAC49DD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ambev.Tech.DeveloperStore.WebApi", "src\WebApi\Ambev.Tech.DeveloperStore.WebApi\Ambev.Tech.DeveloperStore.WebApi.csproj", "{0B510694-AB25-45F5-AE95-6DAFEA8251A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{26409B1D-45A9-4B6D-A525-3E6FAAAA4E70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ambev.Tech.DeveloperStore.Domain", "src\Domain\Ambev.Tech.DeveloperStore.Domain\Ambev.Tech.DeveloperStore.Domain.csproj", "{1354FB5D-DA44-47E1-83DF-C1AF8D66EEB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{45A917A4-4AD0-46E7-A66F-F0CDF184B33C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ambev.Tech.DeveloperStore.Infrastructure", "src\Infrastructure\Ambev.Tech.DeveloperStore.Infrastructure\Ambev.Tech.DeveloperStore.Infrastructure.csproj", "{03D598A8-1D42-446A-A29E-88F852C06BEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{50A00253-512F-4078-BB47-D64EA4AC7E71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ambev.Tech.DeveloperStore.Shared", "src\Shared\Ambev.Tech.DeveloperStore.Shared\Ambev.Tech.DeveloperStore.Shared.csproj", "{FCEBE716-6C1B-4A2F-981A-473794029BB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E58CBBEB-5A8A-48D6-8EF7-8BD1C2560EAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ambev.Tech.DeveloperStore.WebApi.Tests", "src\Tests\Ambev.Tech.DeveloperStore.WebApi.Tests\Ambev.Tech.DeveloperStore.WebApi.Tests.csproj", "{9A55CC11-E57B-4D3B-9D0F-515C389FBD9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2488FAA-35F7-4593-98A6-15B1AAC49DD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2488FAA-35F7-4593-98A6-15B1AAC49DD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2488FAA-35F7-4593-98A6-15B1AAC49DD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2488FAA-35F7-4593-98A6-15B1AAC49DD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B510694-AB25-45F5-AE95-6DAFEA8251A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B510694-AB25-45F5-AE95-6DAFEA8251A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B510694-AB25-45F5-AE95-6DAFEA8251A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B510694-AB25-45F5-AE95-6DAFEA8251A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1354FB5D-DA44-47E1-83DF-C1AF8D66EEB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1354FB5D-DA44-47E1-83DF-C1AF8D66EEB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1354FB5D-DA44-47E1-83DF-C1AF8D66EEB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1354FB5D-DA44-47E1-83DF-C1AF8D66EEB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03D598A8-1D42-446A-A29E-88F852C06BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D598A8-1D42-446A-A29E-88F852C06BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03D598A8-1D42-446A-A29E-88F852C06BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03D598A8-1D42-446A-A29E-88F852C06BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCEBE716-6C1B-4A2F-981A-473794029BB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCEBE716-6C1B-4A2F-981A-473794029BB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCEBE716-6C1B-4A2F-981A-473794029BB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCEBE716-6C1B-4A2F-981A-473794029BB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A55CC11-E57B-4D3B-9D0F-515C389FBD9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A55CC11-E57B-4D3B-9D0F-515C389FBD9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A55CC11-E57B-4D3B-9D0F-515C389FBD9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A55CC11-E57B-4D3B-9D0F-515C389FBD9C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6FC86E2-DDA4-4891-9196-2E277AE3116E} = {43F38F78-4D70-440B-9E51-F651EB5C12B0}
+		{A301E779-50C6-4810-B984-F7D5B3AF99E5} = {43F38F78-4D70-440B-9E51-F651EB5C12B0}
+		{F2488FAA-35F7-4593-98A6-15B1AAC49DD3} = {A301E779-50C6-4810-B984-F7D5B3AF99E5}
+		{0B510694-AB25-45F5-AE95-6DAFEA8251A1} = {C6FC86E2-DDA4-4891-9196-2E277AE3116E}
+		{26409B1D-45A9-4B6D-A525-3E6FAAAA4E70} = {43F38F78-4D70-440B-9E51-F651EB5C12B0}
+		{1354FB5D-DA44-47E1-83DF-C1AF8D66EEB5} = {26409B1D-45A9-4B6D-A525-3E6FAAAA4E70}
+		{45A917A4-4AD0-46E7-A66F-F0CDF184B33C} = {43F38F78-4D70-440B-9E51-F651EB5C12B0}
+		{03D598A8-1D42-446A-A29E-88F852C06BEB} = {45A917A4-4AD0-46E7-A66F-F0CDF184B33C}
+		{50A00253-512F-4078-BB47-D64EA4AC7E71} = {43F38F78-4D70-440B-9E51-F651EB5C12B0}
+		{FCEBE716-6C1B-4A2F-981A-473794029BB7} = {50A00253-512F-4078-BB47-D64EA4AC7E71}
+		{E58CBBEB-5A8A-48D6-8EF7-8BD1C2560EAF} = {43F38F78-4D70-440B-9E51-F651EB5C12B0}
+		{9A55CC11-E57B-4D3B-9D0F-515C389FBD9C} = {E58CBBEB-5A8A-48D6-8EF7-8BD1C2560EAF}
+	EndGlobalSection
+EndGlobal
