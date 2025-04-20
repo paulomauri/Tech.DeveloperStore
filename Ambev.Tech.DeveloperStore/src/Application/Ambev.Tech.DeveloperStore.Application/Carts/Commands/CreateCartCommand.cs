@@ -8,5 +8,13 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Carts.Commands
 {
-    public record CreateCartCommand(int UserId, DateTime Date, List<CartProductDto> Products) : IRequest<CartDto>;
+    public class CreateCartCommand : IRequest<CartDto>
+    {
+        public CartDto CartDto { get; }
+
+        public CreateCartCommand(CartDto cartDto)
+        {
+            CartDto = cartDto;
+        }
+    }
 }

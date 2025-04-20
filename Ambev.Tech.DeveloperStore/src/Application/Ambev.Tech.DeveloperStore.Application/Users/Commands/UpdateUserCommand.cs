@@ -8,5 +8,15 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Users.Commands
 {
-    public record UpdateUserCommand(int Id, string Username, string Email, string Role) : IRequest<UserDto>;
+    public class UpdateUserCommand : IRequest<UserDto>
+    {
+        public int Id { get; }
+        public UserDto UserDto { get; }
+
+        public UpdateUserCommand(int id, UserDto userDto)
+        {
+            Id = id;
+            UserDto = userDto;
+        }
+    }
 }

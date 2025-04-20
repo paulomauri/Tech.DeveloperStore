@@ -4,5 +4,15 @@ using MediatR;
 
 namespace Ambev.Tech.DeveloperStore.Application.Auth.Commands
 {
-    public record LoginCommand(string Username, string Password) : IRequest<AuthTokenDto>;
+    public class LoginCommand : IRequest<AuthTokenDto>
+    {
+        public string username {  get; set; }
+        public string password { get; set; }
+
+        public LoginCommand(string Username, string Password)
+        {
+            username = Username;
+            password = Password;
+        }
+    }
 }

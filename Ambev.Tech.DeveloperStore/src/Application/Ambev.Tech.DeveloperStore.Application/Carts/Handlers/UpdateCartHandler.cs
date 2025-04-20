@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Ambev.Tech.DeveloperStore.Application.Carts.Commands;
+using Ambev.Tech.DeveloperStore.Application.Carts.Dto;
+using Ambev.Tech.DeveloperStore.Application.Interface;
+using Ambev.Tech.DeveloperStore.Domain.Entities;
+using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +11,8 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Carts.Handlers
 {
-    using Application.Carts.Commands;
-    using MediatR;
-    using Domain.Entities;
-    using Domain.Interfaces;
-    using Ambev.Tech.DeveloperStore.Application.Carts.Commands;
 
-    namespace Application.Carts.Handlers;
-
-    public class UpdateCartHandler : IRequestHandler<UpdateCartCommand>
+    public class UpdateCartHandler : IRequestHandler<UpdateCartCommand, CartDto>
     {
         private readonly ICartRepository _cartRepository;
 
@@ -23,21 +21,21 @@ namespace Ambev.Tech.DeveloperStore.Application.Carts.Handlers
             _cartRepository = cartRepository;
         }
 
-        public async Task<Unit> Handle(UpdateCartCommand request, CancellationToken cancellationToken)
+        public async Task<CartDto> Handle(UpdateCartCommand request, CancellationToken cancellationToken)
         {
             var cart = await _cartRepository.GetByIdAsync(request.Id);
 
             if (cart == null)
-                throw new NotFoundException("Cart not found");
+                throw new Exception("Cart not found");
 
-            cart.Products = request.Products.Select(p => new CartItem
+            cart.Items = request.CartDto.Products.Select(p => new CartItem
             {
                 ProductId = p.ProductId,
                 Quantity = p.Quantity
             }).ToList();
 
-            await _cartRepository.UpdateAsync(cart);
-            return Unit.Value;
+            var cartUpdated = await _cartRepository.UpdateAsync(cart);
+            return cartUpdated;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Ambev.Tech.DeveloperStore.Infrastructure.Extensions
             .AddScoped<ICartRepository, CartRepository>()
             .AddScoped<IUserRepository, UserRepository>();
 
-            services.AddScoped<JwtService>();
+            services.AddScoped<JwtTokenGenerator>();
         }
     }
 }

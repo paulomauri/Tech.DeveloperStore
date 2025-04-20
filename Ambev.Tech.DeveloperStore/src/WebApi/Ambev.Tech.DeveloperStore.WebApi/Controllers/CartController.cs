@@ -1,8 +1,7 @@
-﻿using Ambev.Tech.DeveloperStore.Application.Carts.Dto;
-using Ambev.Tech.DeveloperStore.Application.Interface;
-using Ambev.Tech.DeveloperStore.Application.Products.Dto;
-using Ambev.Tech.DeveloperStore.Domain.Entities;
-using AutoMapper;
+﻿using Ambev.Tech.DeveloperStore.Application.Carts.Commands;
+using Ambev.Tech.DeveloperStore.Application.Carts.Dto;
+using Ambev.Tech.DeveloperStore.Application.Carts.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +11,11 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        private readonly ICartRepository _cartRepository;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public CartController(ICartRepository cartRepository, IMapper mapper)
+        public CartController(IMediator mediator)
         {
-            _cartRepository = cartRepository;
-            _mapper = mapper;   
+            _mediator = mediator;
         }
 
         // GET api/cart
@@ -26,9 +23,8 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<CartDto>>> GetAllCarts()
         {
-            var carts = await _cartRepository.GetAllAsync();
-            var cartsDtos = _mapper.Map<IEnumerable<CartDto>>(carts);
-            return Ok(cartsDtos);
+            var result = await _mediator.Send(new GetAllCartsQuery());
+            return Ok(result);
         }
 
         // GET api/cart/5
@@ -36,48 +32,31 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<CartDto>> GetCartById(int id)
         {
-            var cart = await _cartRepository.GetByIdAsync(id);
-            var cartDto = _mapper.Map<IEnumerable<CartDto>>(cart);
-
-            if (cart == null)
-            {
-                return NotFound();
-            }
-            return Ok(cartDto);
+            var result = await _mediator.Send(new GetCartByIdQuery { Id = id });
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // POST api/cart
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<CartDto>> CreateCart([FromBody] CartDto cartDto)
+        public async Task<ActionResult<CartDto>> CreateCart([FromBody] CreateCartCommand command)
         {
-            var cart = _mapper.Map<Cart>(cartDto);
-            var createdCart = await _cartRepository.AddAsync(cart);
-            var createdCartDto = _mapper.Map<CartDto>(createdCart);
-
-            return CreatedAtAction(nameof(GetCartById), new { id = cart.Id }, cart);
+            var result = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetCartById), new { id = result.Id }, result);
         }
 
         // PUT api/cart/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateCart(int id, [FromBody] CartDto cartDto)
+        public async Task<IActionResult> UpdateCart(int id, [FromBody] UpdateCartCommand command)
         {
-            var cart = _mapper.Map<Cart>(cartDto);
-            cartDto.Id = id;
+            if (id != command.Id)
+                return BadRequest("Id do corpo e da URL não coincidem.");
 
-            var existingCart = await _cartRepository.GetByIdAsync(id);
-            if (existingCart == null)
-            {
-                return NotFound();
-            }
-
-            var updatedCart = await _cartRepository.UpdateAsync(cart);
-            if (updatedCart == null)
-                return NotFound();
-
-            var updatedCartDto = _mapper.Map<ProductDto>(updatedCart);
-            return Ok(updatedCartDto);
+            var result = await _mediator.Send(command);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // DELETE api/cart/5
@@ -85,13 +64,8 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteCart(int id)
         {
-            var cart = await _cartRepository.GetByIdAsync(id);
-            if (cart == null)
-            {
-                return NotFound();
-            }
-
-            await _cartRepository.DeleteAsync(id);
+            var result = await _mediator.Send(new DeleteCartCommand { Id = id });
+            if (!result) return NotFound();
             return NoContent();
         }
     }

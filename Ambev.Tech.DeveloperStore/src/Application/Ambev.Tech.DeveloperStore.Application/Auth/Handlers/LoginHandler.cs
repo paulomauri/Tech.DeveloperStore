@@ -1,6 +1,6 @@
 ﻿using Ambev.Tech.DeveloperStore.Application.Auth.Commands;
 using Ambev.Tech.DeveloperStore.Application.Auth.Dto;
-using Ambev.Tech.DeveloperStore.Application.Common.Interfaces;
+using Ambev.Tech.DeveloperStore.Application.Interface;
 using MediatR;
 
 
@@ -8,23 +8,18 @@ namespace Ambev.Tech.DeveloperStore.Application.Auth.Handlers
 {
     public class LoginHandler : IRequestHandler<LoginCommand, AuthTokenDto>
     {
-        private readonly IAuthService _authService;
+        private readonly IAuthRepository _authRepository;
 
-        public LoginHandler(IAuthService authService)
+        public LoginHandler(IAuthRepository authRepository)
         {
-            _authService = authService;
+            _authRepository = authRepository;
         }
 
         public async Task<AuthTokenDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await _authService.ValidateUserAsync(request.Username, request.Password);
+            var authToken = await _authRepository.LoginAsync(new LoginDto() { Username = request.username, Password = request.password});
 
-            if (user == null)
-                return null;
-
-            var token = _authService.GenerateToken(user);
-
-            return new AuthTokenDto { Token = token };
+            return authToken;
         }
     }
 }

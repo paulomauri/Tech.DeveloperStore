@@ -4,6 +4,7 @@ using Ambev.Tech.DeveloperStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Ambev.Tech.DeveloperStore.Application.Auth.Dto;
 using Ambev.Tech.DeveloperStore.Infrastructure.Services;
+using Ambev.Tech.DeveloperStore.Application.Users.Dto;
 
 
 namespace Ambev.Tech.DeveloperStore.Infrastructure.Repository
@@ -12,25 +13,25 @@ namespace Ambev.Tech.DeveloperStore.Infrastructure.Repository
     {
         private readonly AppDbContext _context;
 
-        private readonly JwtService _jwtService;
+        private readonly JwtTokenGenerator _jwtService;
 
-        public AuthRepository(AppDbContext context, JwtService jwtService)
+        public AuthRepository(AppDbContext context, JwtTokenGenerator jwtService)
         {
             _context = context;
             _jwtService = jwtService;
         }
 
-        public async Task<AuthToken> LoginAsync(LoginDto login)
+        public async Task<AuthTokenDto> LoginAsync(LoginDto login)
         {
 
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == login.Username && u.PasswordHash == login.Password);
+                .FirstOrDefaultAsync(u => u.Username == login.Username && u.Password == login.Password);
 
             if (user == null) return null;
 
-            var token = _jwtService.GenerateToken(user.Username);
+            var token = _jwtService.GenerateToken(user);
 
-            return new AuthToken
+            return new AuthTokenDto
             {
                 Token = token
             };

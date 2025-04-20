@@ -13,8 +13,8 @@ namespace Ambev.Tech.DeveloperStore.Application.Interface
         Task<IEnumerable<Cart>> GetAllAsync();
         Task<Cart?> GetByIdAsync(int id);
         Task<IEnumerable<Cart?>> GetByUserIdAsync(int userId);
-        Task<Cart> AddAsync(Cart cart);
-        Task<Cart> UpdateAsync(Cart cart);
+        Task<CartDto> AddAsync(Cart cart);
+        Task<CartDto> UpdateAsync(Cart cart);
         Task<bool> DeleteAsync(int id);
     }
 }

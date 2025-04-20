@@ -27,9 +27,10 @@ namespace Ambev.Tech.DeveloperStore.Application.Products.Handlers
                 Price = request.Price,
                 Description = request.Description,
                 Category = request.Category,
-                Image = request.Image,
-                RatingRate = request.RatingRate,
-                RatingCount = request.RatingCount
+
+                ImageUrl = request.Image,
+                Rating = request.Rate,
+
             };
 
             var createdProduct = await _productRepository.AddAsync(product);
@@ -41,8 +42,8 @@ namespace Ambev.Tech.DeveloperStore.Application.Products.Handlers
                 Description = createdProduct.Description,
                 Category = createdProduct.Category,
                 Image = createdProduct.Image,
-                RatingRate = createdProduct.RatingRate,
-                RatingCount = createdProduct.RatingCount
+                Rating = createdProduct.Rating,
             };
         }
     }
+}

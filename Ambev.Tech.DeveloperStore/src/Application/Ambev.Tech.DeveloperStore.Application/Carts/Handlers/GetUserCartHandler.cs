@@ -1,5 +1,9 @@
 ﻿using Ambev.Tech.DeveloperStore.Application.Carts.Dto;
 using Ambev.Tech.DeveloperStore.Application.Carts.Queries;
+using Ambev.Tech.DeveloperStore.Application.Interface;
+using Ambev.Tech.DeveloperStore.Application.Users.Dto;
+using Ambev.Tech.DeveloperStore.Domain.Entities;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,25 +13,22 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Carts.Handlers
 {
-    public class GetUserCartHandler : IRequestHandler<GetUserCartQuery, CartDto>
+    public class GetUserCartHandler : IRequestHandler<GetUserCartQuery, List<CartDto>>
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IMapper _mapper;
 
-        public GetUserCartHandler(ICartRepository cartRepository)
+        public GetUserCartHandler(ICartRepository cartRepository, IMapper mapper)
         {
             _cartRepository = cartRepository;
+            _mapper = mapper;
         }
 
-        public async Task<CartDto> Handle(GetUserCartQuery request, CancellationToken cancellationToken)
+        public async Task<List<CartDto>> Handle(GetUserCartQuery request, CancellationToken cancellationToken)
         {
-            var cart = await _cartRepository.GetUserCartAsync(request.UserId);
-            return cart == null ? null : new CartDto
-            {
-                Id = cart.Id,
-                UserId = cart.UserId,
-                Date = cart.Date,
-                Products = cart.Products
-            };
+            var cart = await _cartRepository.GetByUserIdAsync(request.UserId);
+            return _mapper.Map<List<CartDto>>(cart);
+
         }
     }
 }

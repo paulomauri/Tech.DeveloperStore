@@ -8,5 +8,16 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Users.Commands
 {
-    public record DeleteUserCommand(int Id) : IRequest;
+
+    public class DeleteUserCommand : IRequest<bool>
+    {
+        public int Id { get; set; } // setter público
+
+        public DeleteUserCommand() { }
+
+        public DeleteUserCommand(int id)
+        {
+            Id = id;
+        }
+    }
 }

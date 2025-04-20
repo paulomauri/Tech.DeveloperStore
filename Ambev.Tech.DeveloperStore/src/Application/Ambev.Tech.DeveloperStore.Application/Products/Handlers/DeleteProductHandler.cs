@@ -18,15 +18,21 @@ namespace Ambev.Tech.DeveloperStore.Application.Products.Handlers
             _productRepository = productRepository;
         }
 
-        public async Task<Unit> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.Id);
             if (product == null)
             {
-                throw new NotFoundException("Product not found");
+                return false;
             }
 
-            await _productRepository.DeleteAsync(product);
-            return Unit.Value;
+            await _productRepository.DeleteAsync(product.Id);
+            return true;
+        }
+
+        Task IRequestHandler<DeleteProductCommand>.Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
+}

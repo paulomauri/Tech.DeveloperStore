@@ -1,9 +1,8 @@
-﻿using Ambev.Tech.DeveloperStore.Application.Auth.Dto;
-using Ambev.Tech.DeveloperStore.Application.Interface;
-using Ambev.Tech.DeveloperStore.Application.Users.Dto;
-using Ambev.Tech.DeveloperStore.Domain.Entities;
-using AutoMapper;
+﻿using Ambev.Tech.DeveloperStore.Application.Auth.Commands;
+using Ambev.Tech.DeveloperStore.Application.Auth.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
 {
@@ -11,20 +10,20 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthRepository _authRepository;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public AuthController(IAuthRepository authRepository, IMapper mapper)
+        public AuthController(IMediator mediator)
         {
-            _authRepository = authRepository;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         // POST api/auth/login
         [HttpPost("login")]
         public async Task<ActionResult<AuthTokenDto>> Login([FromBody] LoginDto loginDto)
         {
-            var token = await _authRepository.LoginAsync(loginDto);
+            var command = new LoginCommand(loginDto.Username, loginDto.Password);
+            var token = await _mediator.Send(command);
+
             if (token == null)
             {
                 return Unauthorized();
@@ -37,7 +36,9 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [HttpPost("validate")]
         public async Task<ActionResult> ValidateToken([FromBody] string token)
         {
-            var isValid = await _authRepository.ValidateTokenAsync(token);
+            var command = new ValidateTokenCommand(token);
+            var isValid = await _mediator.Send(command);
+
             if (!isValid)
             {
                 return Unauthorized();

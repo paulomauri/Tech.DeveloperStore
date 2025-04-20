@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Auth.Queries
 {
-    public class ValidateTokenQuery : IRequest<UserDto>
+    public class ValidateTokenQuery : IRequest<bool>
     {
         public string Token { get; set; }
 

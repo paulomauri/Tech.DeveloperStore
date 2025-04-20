@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Carts.Queries
 {
-    public class GetUserCartQuery : IRequest<IEnumerable<CartDto>>
+    public class GetUserCartQuery : IRequest<List<CartDto>>
     {
-        public int UserId { get; set; }
+        public int UserId { get; }
 
         public GetUserCartQuery(int userId)
         {

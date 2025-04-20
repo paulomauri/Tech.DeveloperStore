@@ -7,6 +7,16 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Carts.Commands
 {
-    public record DeleteCartCommand(int Id) : IRequest;
+    public class DeleteCartCommand : IRequest<bool>
+    {
+        public int Id { get; set; } // setter público
+
+        public DeleteCartCommand() { }
+
+        public DeleteCartCommand(int id)
+        {
+            Id = id;
+        }
+    }
 }
 

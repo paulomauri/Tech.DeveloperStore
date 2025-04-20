@@ -1,4 +1,6 @@
-﻿using Ambev.Tech.DeveloperStore.Application.Auth.Queries;
+﻿using Ambev.Tech.DeveloperStore.Application.Auth.Commands;
+using Ambev.Tech.DeveloperStore.Application.Auth.Queries;
+using Ambev.Tech.DeveloperStore.Application.Interface;
 using Ambev.Tech.DeveloperStore.Application.Users.Dto;
 using MediatR;
 using System;
@@ -9,20 +11,20 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Auth.Handlers
 {
-    public class ValidateTokenHandler : IRequestHandler<ValidateTokenQuery, UserDto>
+    public class ValidateTokenHandler : IRequestHandler<ValidateTokenQuery, bool>
     {
-        private readonly IAuthService _authService;
+        private readonly IAuthRepository _authRepository;
 
-        public ValidateTokenHandler(IAuthService authService)
+        public ValidateTokenHandler(IAuthRepository authRepository)
         {
-            _authService = authService;
+            _authRepository = authRepository;
         }
 
-        public async Task<UserDto> Handle(ValidateTokenQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(ValidateTokenQuery request, CancellationToken cancellationToken)
         {
-            var user = await _authService.ValidateTokenAsync(request.Token);
-
-            return user;
+            // Realiza a validação do token e retorna um valor booleano
+            return await _authRepository.ValidateTokenAsync(request.Token);
         }
+
     }
 }

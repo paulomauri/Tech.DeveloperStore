@@ -8,5 +8,13 @@ using System.Threading.Tasks;
 
 namespace Ambev.Tech.DeveloperStore.Application.Users.Commands
 {
-    public record CreateUserCommand(string Username, string Email, string Role) : IRequest<UserDto>;
+    public class CreateUserCommand : IRequest<UserDto>
+    {
+        public UserDto UserDto { get; }
+
+        public CreateUserCommand(UserDto userDto)
+        {
+            UserDto = userDto;
+        }
+    }
 }

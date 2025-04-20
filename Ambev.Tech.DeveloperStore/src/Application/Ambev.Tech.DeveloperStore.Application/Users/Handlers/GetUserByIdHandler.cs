@@ -1,4 +1,5 @@
-﻿using Ambev.Tech.DeveloperStore.Application.Users.Dto;
+﻿using Ambev.Tech.DeveloperStore.Application.Interface;
+using Ambev.Tech.DeveloperStore.Application.Users.Dto;
 using Ambev.Tech.DeveloperStore.Application.Users.Queries;
 using MediatR;
 using System;
@@ -18,7 +19,7 @@ namespace Ambev.Tech.DeveloperStore.Application.Users.Handlers
             _userRepository = userRepository;
         }
 
-        public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserDto?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(request.Id);
             return user == null ? null : new UserDto

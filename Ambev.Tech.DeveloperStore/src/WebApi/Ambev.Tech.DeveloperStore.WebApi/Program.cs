@@ -8,6 +8,10 @@ using Ambev.Tech.DeveloperStore.Infrastructure.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Ambev.Tech.DeveloperStore.Application.MappingProfiles;
 using System.Text;
+using Ambev.Tech.DeveloperStore.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Ambev.Tech.DeveloperStore.Infrastructure.Settings;
+using Ambev.Tech.DeveloperStore.Infrastructure.Data;
 
 namespace Ambev.Tech.DeveloperStore.WebApi
 {
@@ -35,24 +39,33 @@ namespace Ambev.Tech.DeveloperStore.WebApi
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // Adicionar outros serviços, como EF Core, se necessário
-            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+            builder.Services.AddSingleton<JwtTokenGenerator>();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+                var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
+
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    var config = builder.Configuration;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidIssuer = config["Jwt:Issuer"],
-                        ValidAudience = config["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"])),
-                        ClockSkew = TimeSpan.Zero
-                    };
-                });
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = jwtSettings.Audience,
+                    ValidateLifetime = true
+                };
+            });
 
             var app = builder.Build();
 

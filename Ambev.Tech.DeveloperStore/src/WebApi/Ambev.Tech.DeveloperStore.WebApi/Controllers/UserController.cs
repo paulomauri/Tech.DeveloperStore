@@ -1,9 +1,11 @@
 ﻿using Ambev.Tech.DeveloperStore.Application.Carts.Dto;
 using Ambev.Tech.DeveloperStore.Application.Interface;
-using Ambev.Tech.DeveloperStore.Application.Products.Dto;
 using Ambev.Tech.DeveloperStore.Application.Users.Dto;
+using Ambev.Tech.DeveloperStore.Application.Users.Queries;
+using Ambev.Tech.DeveloperStore.Application.Users.Commands;
 using Ambev.Tech.DeveloperStore.Domain.Entities;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +15,12 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IMediator mediator, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _mediator = mediator;
             _mapper = mapper;
         }
 
@@ -27,8 +29,10 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
         {
-            var users = await _userRepository.GetAllAsync();
-            return Ok(users);
+            var query = new GetAllUsersQuery();
+            var users = await _mediator.Send(query);
+            var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
+            return Ok(userDtos);
         }
 
         // GET api/user/5
@@ -36,7 +40,8 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<UserDto>> GetUserById(int id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var query = new GetUserByIdQuery(id);
+            var user = await _mediator.Send(query);
             if (user == null)
             {
                 return NotFound();
@@ -49,8 +54,8 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<UserDto>> CreateUser([FromBody] UserDto userDto)
         {
-            var user = _mapper.Map<User>(userDto);
-            var createdUser = await _userRepository.AddAsync(user);
+            var command = new CreateUserCommand(userDto);
+            var createdUser = await _mediator.Send(command);
             var createdUserDto = _mapper.Map<UserDto>(createdUser);
             return CreatedAtAction(nameof(GetUserById), new { id = createdUserDto.Id }, createdUserDto);
         }
@@ -60,20 +65,12 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDto userDto)
         {
-            var user = _mapper.Map<User>(userDto);
-            user.Id = id;
-
-            var existingUser = await _userRepository.GetByIdAsync(id);
-            if (existingUser == null)
-            {
-                return NotFound();
-            }
-
-            var updatedUser = await _userRepository.UpdateAsync(user);
+            var command = new UpdateUserCommand(id, userDto);
+            var updatedUser = await _mediator.Send(command);
             if (updatedUser == null)
                 return NotFound();
 
-            var updatedUserDto = _mapper.Map<ProductDto>(updatedUser);
+            var updatedUserDto = _mapper.Map<UserDto>(updatedUser);
             return Ok(updatedUserDto);
         }
 
@@ -82,13 +79,13 @@ namespace Ambev.Tech.DeveloperStore.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
-            if (user == null)
+            var command = new DeleteUserCommand(id);
+            var success = await _mediator.Send(command);
+            if (!success)
             {
                 return NotFound();
             }
 
-            await _userRepository.DeleteAsync(id);
             return NoContent();
         }
     }
