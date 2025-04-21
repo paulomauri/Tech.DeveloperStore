@@ -2,6 +2,7 @@
 using Ambev.Tech.DeveloperStore.Application.Carts.Dto;
 using Ambev.Tech.DeveloperStore.Application.Interface;
 using Ambev.Tech.DeveloperStore.Domain.Entities;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,12 @@ namespace Ambev.Tech.DeveloperStore.Application.Carts.Handlers
     public class UpdateCartHandler : IRequestHandler<UpdateCartCommand, CartDto>
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IMapper _mapper;
 
-        public UpdateCartHandler(ICartRepository cartRepository)
+        public UpdateCartHandler(ICartRepository cartRepository, IMapper mapper)
         {
             _cartRepository = cartRepository;
+            _mapper = mapper;
         }
 
         public async Task<CartDto> Handle(UpdateCartCommand request, CancellationToken cancellationToken)
@@ -28,14 +31,14 @@ namespace Ambev.Tech.DeveloperStore.Application.Carts.Handlers
             if (cart == null)
                 throw new Exception("Cart not found");
 
-            cart.Items = request.CartDto.Products.Select(p => new CartItem
+            cart.Items = request.CartDto.Items.Select(p => new CartItem
             {
                 ProductId = p.ProductId,
                 Quantity = p.Quantity
             }).ToList();
 
             var cartUpdated = await _cartRepository.UpdateAsync(cart);
-            return cartUpdated;
+            return _mapper.Map<CartDto>(cartUpdated);
         }
     }
 }

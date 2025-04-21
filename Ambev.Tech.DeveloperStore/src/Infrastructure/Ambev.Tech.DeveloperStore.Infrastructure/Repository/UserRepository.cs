@@ -69,5 +69,10 @@ namespace Ambev.Tech.DeveloperStore.Infrastructure.Repository
 
             return true;
         }
+
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
     }
 }

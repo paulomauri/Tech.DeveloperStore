@@ -12,6 +12,11 @@ using Ambev.Tech.DeveloperStore.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Ambev.Tech.DeveloperStore.Infrastructure.Settings;
 using Ambev.Tech.DeveloperStore.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Ambev.Tech.DeveloperStore.Application.Behaviors;
+using Ambev.Tech.DeveloperStore.WebApi.Middlewares;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace Ambev.Tech.DeveloperStore.WebApi
 {
@@ -31,11 +36,10 @@ namespace Ambev.Tech.DeveloperStore.WebApi
             // Registrar a infraestrurura
             builder.Services.AddInfrastructure();
 
-            // Adicionar MediatR e AutoMapper
+            // Adicionar MediatR 
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-            //builder.Services.AddMediatR(typeof(Program).Assembly);
-
-            // Registre o AutoMapper
+            // Adicionar o AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // Adicionar outros serviços, como EF Core, se necessário
@@ -67,13 +71,33 @@ namespace Ambev.Tech.DeveloperStore.WebApi
                 };
             });
 
+            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+            // Adiciona os serviços ao contêiner
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DeveloperStore API", Version = "v1" });
+
+                // Para incluir comentários de documentação XML (opcional, mas recomendado)
+                var xmlFile = Path.Combine(AppContext.BaseDirectory, "Ambev.Tech.DeveloperStore.WebApi.xml");
+                c.IncludeXmlComments(xmlFile);
+            });
+
+            builder.Services.AddControllers();
+
             var app = builder.Build();
+            
+            app.UseMiddleware<ExceptionHandlingMiddleware>(); 
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwagger(); // Gera a documentação Swagger
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DeveloperStore API v1");
+                    c.RoutePrefix = string.Empty; 
+                });
             }
 
             app.UseHttpsRedirection();

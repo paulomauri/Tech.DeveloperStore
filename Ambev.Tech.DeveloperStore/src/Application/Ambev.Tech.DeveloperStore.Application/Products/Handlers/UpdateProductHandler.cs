@@ -24,16 +24,15 @@ namespace Ambev.Tech.DeveloperStore.Application.Products.Handlers
             var product = await _productRepository.GetByIdAsync(request.Id);
             if (product == null)
             {
-                throw new NotFoundException("Product not found");
+                throw new Exception("Product not found");
             }
 
             product.Title = request.Title;
             product.Price = request.Price;
             product.Description = request.Description;
             product.Category = request.Category;
-            product.Image = request.Image;
-            product.RatingRate = request.RatingRate;
-            product.RatingCount = request.RatingCount;
+            product.ImageUrl = request.Image;
+            product.Rating = request.Rate;
 
             var updatedProduct = await _productRepository.UpdateAsync(product);
 
@@ -44,9 +43,8 @@ namespace Ambev.Tech.DeveloperStore.Application.Products.Handlers
                 Price = updatedProduct.Price,
                 Description = updatedProduct.Description,
                 Category = updatedProduct.Category,
-                Image = updatedProduct.Image,
-                RatingRate = updatedProduct.RatingRate,
-                RatingCount = updatedProduct.RatingCount
+                Image = updatedProduct.ImageUrl,
+                Rating = updatedProduct.Rating
             };
         }
     }

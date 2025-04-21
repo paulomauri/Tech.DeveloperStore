@@ -11,7 +11,7 @@ namespace Ambev.Tech.DeveloperStore.Application.Carts.Dto
         public int Id { get; set; }
         public int UserId { get; set; }
         public DateTime Date { get; set; }
-        public List<CartProductDto> Products { get; set; } = new();
+        public List<CartProductDto> Items { get; set; } = new();
     }
 
 }

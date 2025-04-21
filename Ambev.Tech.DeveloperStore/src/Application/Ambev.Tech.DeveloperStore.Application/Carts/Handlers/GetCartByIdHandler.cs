@@ -30,7 +30,7 @@ namespace Ambev.Tech.DeveloperStore.Application.Carts.Handlers
                 Id = cart.Id,
                 UserId = cart.UserId,
                 Date = cart.Date,
-                Products = _mapper.Map<List<CartProductDto>>(cart.Items)
+                Items = _mapper.Map<List<CartProductDto>>(cart.Items)
             };
         }
     }

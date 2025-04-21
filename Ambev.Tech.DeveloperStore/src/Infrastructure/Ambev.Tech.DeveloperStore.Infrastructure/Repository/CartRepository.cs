@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ambev.Tech.DeveloperStore.Application.Carts.Dto;
 
 namespace Ambev.Tech.DeveloperStore.Infrastructure.Repository
 {
@@ -70,5 +71,6 @@ namespace Ambev.Tech.DeveloperStore.Infrastructure.Repository
 
             return cart;
         }
+
     }
 }

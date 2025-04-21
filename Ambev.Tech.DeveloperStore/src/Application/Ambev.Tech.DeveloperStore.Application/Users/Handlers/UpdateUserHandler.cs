@@ -34,7 +34,7 @@ namespace Ambev.Tech.DeveloperStore.Application.Users.Handlers
             var userToUpdate = _mapper.Map<User>(request.UserDto);
             userToUpdate.Id = request.Id;
 
-            var updatedUser = await _userRepository.UpdateAsync(userToUpdate);
+            var updatedUser = await _userRepository.UpdateAsync(request.Id, userToUpdate);
             return _mapper.Map<UserDto>(updatedUser);
         }
     }

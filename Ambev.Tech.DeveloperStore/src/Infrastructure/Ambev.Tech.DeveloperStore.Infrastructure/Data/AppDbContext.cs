@@ -14,10 +14,11 @@ namespace Ambev.Tech.DeveloperStore.Infrastructure.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<AuthToken> AuthTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Ignore<AuthToken>();
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Product>(entity =>
@@ -26,16 +27,20 @@ namespace Ambev.Tech.DeveloperStore.Infrastructure.Data
 
             });
 
+
             modelBuilder.Entity<Cart>(entity =>
             {
                 entity.HasKey(c => c.Id);
                 entity.HasMany(c => c.Items)
                       .WithOne()
-                      .HasForeignKey(ci => ci.Id);
-                entity.OwnsMany(c => c.Items, item =>
-                {
-                    item.WithOwner().HasForeignKey("CartId");
-                });
+                      .HasForeignKey(ci => ci.CartId); // ✅ Corrigir o FK aqui
+            });
+
+            modelBuilder.Entity<CartItem>(entity =>
+            {
+                entity.HasKey(ci => ci.Id);
+                entity.Property(ci => ci.ProductId);
+                entity.Property(ci => ci.Quantity);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -43,16 +48,6 @@ namespace Ambev.Tech.DeveloperStore.Infrastructure.Data
                 entity.HasKey(u => u.Id);
 
             });
-
-            //modelBuilder.Entity<AuthToken>(entity =>
-            //{
-            //    entity.HasKey(a => a.Id);
-            //    entity.Property(a => a.Token).IsRequired();
-            //    entity.Property(a => a.ExpiresAt);
-            //    entity.HasOne<User>()
-            //          .WithMany()
-            //          .HasForeignKey(a => a.UserId);
-            //});
         }
     }
 }
